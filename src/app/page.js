@@ -1,95 +1,142 @@
+"use client";
 import Image from "next/image";
-import styles from "./page.module.css";
+import { useState } from "react";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [task, setTask] = useState("");
+  const [tasks, setTasks] = useState([]);
+  const [filter, setFilter] = useState("all"); // State to manage task filter ("all", "completed", "pending")
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+  // function to add the task
+  const addTask = () => {
+    if (task.trim() === "") return;
+    setTasks([...tasks, { id: Date.now(), text: task, completed: false }]);
+    setTask("");
+  };
+
+  // function to mark the task as complete or incomplete
+  const toggleTaskCompletion = (id) => {
+    setTasks(
+      tasks.map((t) =>
+        t.id === id ? { ...t, completed: !t.completed } : t
+      )
+    );
+  };
+
+  // function to delete the task
+  const deleteTask = (id) => {
+    setTasks(tasks.filter((t) => t.id !== id));
+  };
+
+  // function to edit the task
+  const editTask = (id, newText) => {
+    setTasks(
+      tasks.map((t) => (t.id === id ? { ...t, text: newText } : t))
+    );
+  };
+
+  // function to clear all completed tasks
+  const clearCompletedTasks = () => {
+    setTasks(tasks.filter((t) => !t.completed));
+  };
+
+  // function to filter tasks based on completion status
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === "completed") return task.completed;
+    if (filter === "pending") return !task.completed;
+    return true; // "all" filter: show all tasks
+  });
+
+  return (
+    <div className="m-5">
+      <div className="title-box">
+        <h1>To-Do List</h1>
+      </div>
+      <div className="w-full max-w-md flex">
+        <input
+          type="text"
+          placeholder="Add a new task"
+          value={task}
+          className="border border-black p-2"
+          onChange={(e) => setTask(e.target.value)}
+        />
+        <button onClick={addTask} className="ml-3 bg-gray-500 p-2">
+          Add Task
+        </button>
+      </div>
+
+      {/* Filter buttons */}
+      <div className="mt-4">
+        <button
+          onClick={() => setFilter("all")}
+          className={`p-2 ${filter === "all" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          All
+        </button>
+        <button
+          onClick={() => setFilter("completed")}
+          className={`p-2 ml-2 ${filter === "completed" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          Completed
+        </button>
+        <button
+          onClick={() => setFilter("pending")}
+          className={`p-2 ml-2 ${filter === "pending" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
         >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          Pending
+        </button>
+      </div>
+
+      {/* Clear completed tasks */}
+      <div className="mt-4">
+        <button
+          onClick={clearCompletedTasks}
+          className="bg-red-500 text-white p-2 mt-2"
+        >
+          Clear Completed Tasks
+        </button>
+      </div>
+
+      {/* Task list */}
+      <ul className="mt-6 w-full max-w-md space-y-2">
+        {filteredTasks.map((t) => (
+          <li key={t.id} className="flex justify-between items-center">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                checked={t.completed}
+                onChange={() => toggleTaskCompletion(t.id)}
+              />
+              <span
+                className={`${
+                  t.completed ? "line-through text-gray-500" : "text-gray-800"
+                }`}
+              >
+                {t.text}
+              </span>
+            </div>
+
+            {/* Edit Button */}
+            <button
+              onClick={() => {
+                const newText = prompt("Edit task:", t.text);
+                if (newText) editTask(t.id, newText);
+              }}
+              className="bg-yellow-500 text-white p-1 ml-2"
+            >
+              Edit
+            </button>
+
+            {/* Delete Button */}
+            <button
+              onClick={() => deleteTask(t.id)}
+              className="bg-red-500 text-white p-1 ml-2"
+            >
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

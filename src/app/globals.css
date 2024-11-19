@@ -1,42 +1,180 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html,
+/* General body and layout styling */
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7fb;
+  color: #333;
   margin: 0;
+  padding: 0;
+  background-image: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c8844a64-f232-48c1-a2f6-afca15f1e6d9/di5d23t-220236d0-a73d-4fa8-8c14-b8f5311c2d58.jpg/v1/fill/w_1182,h_676,q_70,strp/bedroom_background_by_emilylily1423_di5d23t-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzMyIiwicGF0aCI6IlwvZlwvYzg4NDRhNjQtZjIzMi00OGMxLWEyZjYtYWZjYTE1ZjFlNmQ5XC9kaTVkMjN0LTIyMDIzNmQwLWE3M2QtNGZhOC04YzE0LWI4ZjUzMTFjMmQ1OC5qcGciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.Xajf2mPSLuGOdLA1DR0GPBC4xXx9wcKd_wTHF6Ou8L4); /* Background image path */
+  background-size: cover; /* Make sure the image covers the entire viewport */
+  background-position: center; /* Center the background image */
+  background-attachment: fixed; /* Fix the background image during scroll */
+  background-repeat: no-repeat; /* Prevent repeating the image */
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* Container for the entire to-do list */
+.m-5 {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1; /* Ensure the content is on top of the background */
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+/* Heading */
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #53f56e;
+  text-align: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4); /* Stronger text-shadow */
+}
+
+/* Task input container */
+.w-full {
+  width: 100%;
+}
+
+.max-w-md {
+  max-width: 500px;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+/* Input styling for adding tasks */
+input[type="text"] {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease-in-out;
+}
+
+input[type="text"]:focus {
+  border-color: #5af15a;
+  box-shadow: 0 0 5px rgba(90, 241, 90, 0.5); /* Add subtle focus shadow */
+}
+
+/* Add task button styling */
+button {
+  background-color: #71c583;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #c9d48b;
+  transform: scale(1.05); /* Slightly scale button on hover */
+}
+
+button:focus {
+  outline: none;
+}
+
+/* Task list styles */
+ul {
+  list-style-type: square;
+  padding: 5px;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent background */
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  margin-bottom: 10px;
+  background-blend-mode: hue;
+}
+
+li:hover {
+  background-color: #f9f9f9a2;
+}
+
+li button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease-in-out;
+}
+
+li button:hover {
+  background-color: #e53935;
+}
+
+/* Styling for completed tasks */
+span {
+  font-size: 1rem;
+  padding-left: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+input[type="checkbox"] {
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.line-through {
+  text-decoration: line-through;
+  color: #b0b0b0;
+}
+
+.text-gray-500 {
+  color: #b0b0b0;
+}
+
+.text-gray-800 {
+  color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .m-5 {
+    margin: 10px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .max-w-md {
+    max-width: 100%;
+  }
+
+  input[type="text"] {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  button {
+    font-size: 0.9rem;
+  }
+
+  li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  li button {
+    margin-top: 10px;
+    width: 100%;
   }
 }
